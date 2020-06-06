@@ -110,8 +110,3 @@ remeber use { useState } to use hooks and create a priview image to upload
 
 - GoodLuck :skull:  
 
-### Iteration 5 | Deploy!
-
-The last step in IronTumblr should be to deploy to Heroku. Don't forget to deploy your database on mongolab.
-
-Your site should be live and functioning with a working URL.
