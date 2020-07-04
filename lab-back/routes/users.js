@@ -1,12 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../models/User");
-const uploader = require("../helpers/cloudinary");
+const cloudinaryUploader = require("../helpers/cloudinary");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-router.post("/signup",  uploader.single("avatar"), (req, res) => {
-  
+router.post("/signup",  cloudinaryUploader.single("avatar"), (req, res) => {
+  console.log(req);
   const avatar = req.file.path;
   const { password, ...userValues } = req.body;
 
@@ -22,10 +22,9 @@ router.post("/signup",  uploader.single("avatar"), (req, res) => {
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
-
   User.findOne({ email }).then((user) => {
-    if (user === null) return res.status(404).json({ msg: "Email no existe" });
-
+    if (user === null) return res.status(404).json({ msg: "No existe el usuario"});
+    // Sí existe el usuario, compara el pwd
     bcrypt.compare(password, user.password).then((match) => {
       if (match) {
         const userObject = user.toObject();
@@ -40,6 +39,8 @@ router.post("/login", (req, res) => {
             httpOnly: true,
           })
           .json({ user: userObject });
+      } else {
+        return res.status(404).json({ msg: "Pwd no existe" });
       }
     });
   });

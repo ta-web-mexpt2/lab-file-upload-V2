@@ -4,6 +4,10 @@ const uploader = require("../helpers/cloudinary");
 const { veryToken } = require("../helpers/auth");
 const Comments = require("../models/Comments");
 
+// Para poder leer el :postId, tiene que incluirse esa parte de la ruta
+// en este archivo y no en App.js, como se menciona en:
+// https://github.com/expressjs/express/issues/3177
+
 // New comment on /posts/:id/comments
 router.post("/:postId/comments/", veryToken, uploader.single("imagePath"), (req, res) => {
     console.log(req.params);
