@@ -1,4 +1,5 @@
-  
+// Este módulo en escencia exporta un "multer" pero ya con un storage pre-configurado con cloudinary 
+// Recordar que multer es un middleware para manejo de peticiones multipart o de tipo formData (con multipart)
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
