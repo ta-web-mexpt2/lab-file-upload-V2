@@ -16,7 +16,7 @@ const postSchema = new Schema(
         type: String,
         required: [true, "Debes agregar que un nombre para tu post"],
     },
-    picPath:{
+    picUrl:{
         type:String,
         required: [true, "Debes agregar una imagen para tu post"],
     }
