@@ -1,18 +1,20 @@
 var express = require("express");
 var router = express.Router();
+const uploadCloud = require('../helpers/cloudinary.js')
 const User = require("../models/User");
-const uploader = require("../helpers/cloudinary");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-router.post("/signup",  uploader.single("avatar"), (req, res) => {
+router.post("/signup",  uploadCloud.single("avatar"), (req, res, next) => {
   
-  const avatar = req.file.path;
   const { password, ...userValues } = req.body;
+  const avatarUrl = req.file.url;
+  const avatarName = req.file.originalname;
+  const newUser = new user({username, email, password, avatarUrl, avatarName })
 
   bcrypt.hash(password, 10).then((hashedPassword) => {
     const user = { ...userValues, password: hashedPassword,avatar };
-    User.create(user)
+    User.create(newUser)
       .then(() => {
         res.status(201).json({ msg: "Usuario creado con éxto" });
       })
@@ -44,7 +46,6 @@ router.post("/login", (req, res) => {
     });
   });
 });
-
 router.post("/logout", (req, res) => {
   res.clearCookie("token").json({ msg: "logout" });
 });
