@@ -1,49 +1,60 @@
-require("dotenv").config();
+require("dotenv").config()
 
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const mongoose = require("mongoose");
-const cors = require("cors");
+const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
+const express = require("express")
+const mongoose = require("mongoose")
+const logger = require("morgan")
+const session = require("express-session")
+const passport = require("./config/passport")
+
 
 mongoose
-  .connect(process.env.DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  .connect("mongodb://localhost/server", { useNewUrlParser: true })
+  .then(x => {
+    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
-  .then((x) => {
-    console.log(
-      `Connected to Mongo! Database name: "${x.connections[0].name}"`
-    );
+  .catch(err => {
+    console.error("Error connecting to mongo", err)
   })
-  .catch((err) => {
-    console.error("Error connecting to mongo", err);
-  });
 
-const app = express();
+  const app = express()
 
+// Middleware Setup
+app.use(logger("dev"))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+// app.use(
+//   cors({
+//     origin: ["http://localhost:3000"],
+//     credentials: true
+//   })
+// )
 app.use(
-    cors({
-      origin: ["http://localhost:3001","http://localhost:3000"],
-      credentials: true,
-    })
-  );
+  session({
+    secret: process.env.SECRET,
+    saveUninitialized: true,
+    resave: true
+  })
+)
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-// Routes config
-const usersRouter = require('./routes/users');
-const postsRouter = require('./routes/posts')
+// INvocacion del middleware de forma global
+// app.use(mandarATodosAComer)
 
-app.use('/api/users', usersRouter);
-app.use('/api/posts', postsRouter);
+app.use(passport.initialize())
+app.use(passport.session())
 
-app.use("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-  
-module.exports = app;
+
+const index = require("./routes/index")
+app.use("/", index)
+// invocacion del middleware de forma grupal (para todas las rutas de un archivo)
+app.use("/auth", /*mandarATodosAComer*/ require("./routes/auth"))
+
+module.exports = app
+
+// function mandarATodosAComer(req, res, next) {
+//   console.log("Vamonos a comerrrrr")
+
+//   next()
+// }
