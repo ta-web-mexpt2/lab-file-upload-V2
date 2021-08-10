@@ -30,7 +30,6 @@ function Home () {
         .catch()
     }
     
-    useEffect
   
     const uploadFile = (e) => {
       setData({...data, picPath:e.target.files[0]})
