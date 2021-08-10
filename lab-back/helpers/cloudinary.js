@@ -14,6 +14,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "lab-uploader",
     use_filename: true,
+    allowedFormats:["jpg","png","jpeg","pdf"]
   },
 });
 
