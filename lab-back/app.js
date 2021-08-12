@@ -39,6 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts')
 
+
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 
