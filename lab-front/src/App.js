@@ -1,24 +1,38 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import CreatePost from './components/CreatePost'
+import axios from 'axios'
+import  {useState, useEffect } from 'react'
 
 function App() {
+
+  
+     const [posts, setPosts] = useState(null)
+     useEffect(() => {
+      function getPosts(){
+       axios
+       .get('http://localhost:3001/api/post/all')
+       .then(({data: {posts}}) =>{
+           setPosts(posts)
+         }
+       )
+    
+
+     }
+     getPosts()
+   }, [])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <CreatePost/>
+      {posts?.map(posts => <div key={posts._id}>
+
+        <h4>{posts.title}</h4>
+        <p>{posts.body}</p>
+        <img src={posts.image} width='200px'/>
+        </div>)}
     </div>
   );
 }

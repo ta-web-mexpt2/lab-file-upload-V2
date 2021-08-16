@@ -9,9 +9,9 @@ router.post("/signup",  uploader.single("avatar"), (req, res) => {
   
   const avatar = req.file.path;
   const { password, ...userValues } = req.body;
-
+  console.log(req.body)
   bcrypt.hash(password, 10).then((hashedPassword) => {
-    const user = { ...userValues, password: hashedPassword,avatar };
+    const user = {  password: hashedPassword,avatar, ...userValues };
     User.create(user)
       .then(() => {
         res.status(201).json({ msg: "Usuario creado con éxto" });

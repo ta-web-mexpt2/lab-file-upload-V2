@@ -14,4 +14,8 @@ router.post("/", veryToken, uploader.single("picPath"), (req, res) => {
       .catch((err) => res.status(400).json(err));
   });
 
+  router.post('/upload-image', uploader.single('img'), (req, res)=>{
+    console.log(req.file)
+  })
+
 module.exports = router;
