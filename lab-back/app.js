@@ -42,8 +42,6 @@ const postsRouter = require('./routes/posts')
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 
-app.use("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+
   
 module.exports = app;
